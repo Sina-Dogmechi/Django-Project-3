@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
-from .serializers import UserRegisterSerializer, UserSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, ChangePasswordSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
@@ -30,3 +30,15 @@ class UserProfileView(APIView):
         request.user.username = username
         request.user.save(update_fields=['username'])
         return Response(UserSerializer(request.user).data)
+
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request):
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        request.user.set_password(serializer.validated_data['new_password'])
+        request.user.save(update_fields=['password'])
+        return Response({'message': 'password changed successfully'})
