@@ -8,7 +8,7 @@ from .serializers import UserRegisterSerializer, UserSerializer
 
 class UserRegisterView(APIView):
     def post(self, request):
-        serializer = UserRegisterSerializer(data=request.data)
+        serializer = UserRegisterSerializer(data=request.data) # Deserializing(json -> python datatype)
         serializer.is_valid(raise_exception=True)
         user = User(email=serializer.validated_data['email'], username=serializer.validated_data['username'])
         user.set_password(serializer.validated_data['password'])
