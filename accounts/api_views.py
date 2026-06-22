@@ -42,3 +42,23 @@ class ChangePasswordView(APIView):
         request.user.set_password(serializer.validated_data['new_password'])
         request.user.save(update_fields=['password'])
         return Response({'message': 'password changed successfully'})
+
+
+class UserDetailView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, pk):
+        user = User.objects.filter(id=pk).first()
+        if not user:
+            return Response({'message': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    def delete(self, request, pk):
+        user = User.objects.filter(id=pk).first()
+        if not user:
+            return Response({'message': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
