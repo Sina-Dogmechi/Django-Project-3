@@ -10,4 +10,5 @@ urlpatterns = [
     path('profile/', api_views.UserProfileView.as_view()),
     path('change-password/', api_views.ChangePasswordView.as_view()),
     path('admin/<int:pk>/', api_views.UserDetailView.as_view()),
+    path('admin/<int:pk>/deactivate/', api_views.UserDeactivateView.as_view()),
 ]

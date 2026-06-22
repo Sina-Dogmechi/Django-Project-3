@@ -62,3 +62,16 @@ class UserDetailView(APIView):
 
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserDeactivateView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def put(self, request, pk):
+        user = User.objects.filter(id=pk).first()
+        if not user:
+            return Response({'message': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        user.is_active = False
+        user.save(update_fields=['is_active'])
+        return Response({'message': 'user deactivated'}, status=status.HTTP_200_OK)
