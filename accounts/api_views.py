@@ -2,9 +2,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import UserRegisterSerializer, UserSerializer, ChangePasswordSerializer
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from .services import create_user, update_profile, change_password, deactivate_user
 from .selectors import get_user_by_id
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from .models import User
 
 
 
@@ -71,3 +74,19 @@ class UserDeactivateView(APIView):
 
         deactivate_user(user=user)
         return Response({'message': 'user deactivated'}, status=status.HTTP_200_OK)
+
+
+class UserActivationAccountView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except Exception:
+            return Response({'message':'Invalid Link'}, status=status.HTTP_400_BAD_REQUEST)
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save(update_fields=['is_active'])
+            return Response({'message': 'User activated'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Invalid Link'}, status=status.HTTP_400_BAD_REQUEST)
