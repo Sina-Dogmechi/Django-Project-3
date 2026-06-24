@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Question
 from rest_framework import status
-from .serializers import QuestionListSerializer, QuestionDetailSerializer, QuestionCreateSerializer
+from .serializers import QuestionListSerializer, QuestionDetailSerializer, QuestionCreateSerializer, QuestionUpdateSerializer
 from rest_framework.permissions import IsAuthenticated
 from .services import QuestionService
 from core.permissions import IsOwnerOrReadOnly
@@ -38,13 +38,22 @@ class QuestionDeleteView(APIView):
     permission_classes = [IsOwnerOrReadOnly]
 
     def delete(self, request, qid):
-        qs = get_question_by_id(qid=qid)
-        self.check_object_permissions(request, qs)
-        QuestionService.delete_question(question=qs)
+        question = get_question_by_id(qid=qid)
+        self.check_object_permissions(request, question)
+        QuestionService.delete_question(question=question)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class QuestionUpdateView(APIView):
+    permission_classes = [IsOwnerOrReadOnly]
 
+    def patch(self, request, qid):
+        question = get_question_by_id(qid=qid)
+        self.check_object_permissions(request, question)
+        serializer = QuestionUpdateSerializer(instance=question, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(QuestionDetailSerializer(instance=question).data)
 
 
 

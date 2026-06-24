@@ -22,3 +22,9 @@ class QuestionDetailSerializer(serializers.ModelSerializer):
 class QuestionCreateSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=255)
     body = serializers.CharField()
+
+
+class QuestionUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ('title', 'body')

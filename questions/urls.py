@@ -8,4 +8,5 @@ urlpatterns = [
     path('<uuid:id>/', api_views.QuestionDetailView.as_view()),
     path('create/', api_views.QuestionCreateView.as_view()),
     path('delete/<uuid:qid>/', api_views.QuestionDeleteView.as_view()),
+    path('update/<uuid:qid>/', api_views.QuestionUpdateView.as_view()),
 ]
