@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Question
 from rest_framework import status
-from .seializers import QuestionListSerializer, QuestionDetailSerializer, QuestionCreateSerializer
+from .serializers import QuestionListSerializer, QuestionDetailSerializer, QuestionCreateSerializer
 from rest_framework.permissions import IsAuthenticated
 from .services import QuestionService
 
