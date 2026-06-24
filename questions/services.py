@@ -17,3 +17,8 @@ class QuestionService:
         # Question.objects.filter(id=question.id).update(views_count=F('views_count') + 1)
         question.views_count = F('views_count') + 1
         question.save()
+
+    @staticmethod
+    @transaction.atomic
+    def delete_question(*, question):
+        question.delete()
