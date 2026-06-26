@@ -11,3 +11,7 @@ class AnswersListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
         fields = ('id', 'body', 'score', 'is_accepted', 'created', 'author_email', 'question')
+
+
+class AnswerCreateSerializer(serializers.Serializer):
+    body = serializers.CharField()
