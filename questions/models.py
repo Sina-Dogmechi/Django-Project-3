@@ -10,7 +10,7 @@ class Question(BaseModel):
     views_count = models.PositiveIntegerField(default=0)
     answers_count = models.PositiveIntegerField(default=0)
     score = models.IntegerField(default=0)
-    accepted_answers = models.ForeignKey('answers.Answer', blank=True, null=True, on_delete=models.SET_NULL, related_name='accepted_for_questions')
+    accepted_answer = models.OneToOneField('answers.Answer', blank=True, null=True, on_delete=models.SET_NULL, related_name='accepted_for_questions')
 
     class Meta:
         ordering = ('-created',)

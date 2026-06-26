@@ -9,4 +9,5 @@ urlpatterns = [
     path('create/', api_views.QuestionCreateView.as_view()),
     path('delete/<uuid:qid>/', api_views.QuestionDeleteView.as_view()),
     path('update/<uuid:qid>/', api_views.QuestionUpdateView.as_view()),
+    path('accept/<uuid:question_id>/<uuid:answer_id>/', api_views.AcceptAnswerView.as_view()),
 ]
