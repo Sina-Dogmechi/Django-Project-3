@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('home.urls', namespace='home')),
     path('questions/', include('questions.urls', namespace='questions')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('answers/', include('answers.urls', namespace='answers')),
 ]
