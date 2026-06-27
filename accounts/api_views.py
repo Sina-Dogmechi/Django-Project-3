@@ -8,10 +8,12 @@ from .selectors import get_user_by_id, get_user_by_email
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
 from .models import User
-
+from .throttlers import RegisterThrottle, ProfileThrottle
 
 
 class UserRegisterView(APIView):
+    throttle_classes = [RegisterThrottle]
+
     def post(self, request):
         serializer = UserRegisterSerializer(data=request.data) # Deserializing(json -> python datatype)
         serializer.is_valid(raise_exception=True)
@@ -22,6 +24,7 @@ class UserRegisterView(APIView):
 
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [ProfileThrottle]
 
     def get(self, request):
         serializer = UserSerializer(request.user)
