@@ -8,9 +8,12 @@ from .services import QuestionService
 from core.permissions import IsOwnerOrReadOnly
 from .selectors import get_question_by_id
 from answers.selectors import get_answer_by_id
+from drf_spectacular.utils import extend_schema
 
 
 class AllQuestionsView(APIView):
+    serializer_class = QuestionListSerializer
+
     def get(self, request):
         questions = Question.objects.all()
         serialized_data = QuestionListSerializer(instance=questions, many=True)
@@ -25,6 +28,7 @@ class QuestionDetailView(APIView):
         return Response(serialized_data.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(request=QuestionCreateSerializer, responses={200: QuestionDetailSerializer})
 class QuestionCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
