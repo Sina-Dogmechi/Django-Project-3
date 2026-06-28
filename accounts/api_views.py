@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserRegisterSerializer, UserSerializer, ChangePasswordSerializer, ForgotPasswordSerializer
+from .serializers import UserRegisterSerializer, UserSerializer, ChangePasswordSerializer, ForgotPasswordSerializer, UserLoginSerializer
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from .services import create_user, update_profile, change_password, deactivate_user, build_reset_password_link, send_reset_password_email
 from .selectors import get_user_by_id, get_user_by_email
@@ -9,6 +9,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
 from .models import User
 from .throttlers import RegisterThrottle, ProfileThrottle
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 class UserRegisterView(APIView):
@@ -129,7 +130,8 @@ class ResetPasswordView(APIView):
         return Response({'message': 'password changed successfully'})
 
 
-
+class UserLoginView(TokenObtainPairView):
+    serializer_class = UserLoginSerializer
 
 
 
